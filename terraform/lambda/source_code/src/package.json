@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
-    "postbuild": "copy package*.json dist && cd dist && npm i --omit=dev"
+    "postbuild": "cp package*.json dist && cd dist && npm i --omit=dev"
 },
   "keywords": [],
   "author": "",
