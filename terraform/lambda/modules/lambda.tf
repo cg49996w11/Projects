@@ -33,8 +33,9 @@ resource "aws_iam_role_policy_attachment" "attach_iam_policy_to_iam_role" {
 
 data "archive_file" "source_code_zip" {
   type        = "zip"
-  source_dir  = var.source_code_dir
+  source_dir  = var.zip_dir_path
   output_path = "${path.module}/app.zip"
+  depends_on = [terraform_data.build]
 }
 
 resource "aws_lambda_function" "terraform_lambda_func" {
@@ -45,4 +46,20 @@ resource "aws_lambda_function" "terraform_lambda_func" {
   handler          = var.lambda_handler
   source_code_hash = data.archive_file.source_code_zip.output_base64sha256
   depends_on       = [aws_iam_role_policy_attachment.attach_iam_policy_to_iam_role, data.archive_file.source_code_zip]
+}
+
+resource "terraform_data" "build" {
+  triggers_replace = [
+    # "${timestamp()}"
+    local.lambda_md5
+  ]
+ 
+  provisioner "local-exec" {
+    command     = "npm run build"
+    working_dir = var.index_directory_path
+  }
+}
+
+locals {
+  lambda_md5 = filemd5(var.index_file_path)
 }

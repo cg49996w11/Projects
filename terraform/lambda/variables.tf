@@ -23,8 +23,26 @@ variable "lambda_role_policy_name" {
   description = "name of policy that will be attached to lambda role"
 }
 
-variable "source_code_dir" {
+variable "source_code_dir_path" {
   type        = string
-  description = "path of folder where inside which source code is located"
+  description = "root folder  inside which source code is located"
   default     = "source_code"
+}
+
+variable "zip_dir_path" {
+  type        = string
+  description = "path of folder in which all files need to be zipped"
+  default     = "source_code/src/dist"
+}
+
+variable "index_file_path" {
+  type        = string
+  description = "the path to file that contains lambda code that needs to be executed"
+  default     = "source_code/src/index.ts"
+}
+
+variable "index_directory_path" {
+  type        = string
+  description = "the path to folder that contains lambda code that needs to be executed"
+  default     = "source_code/src"
 }
